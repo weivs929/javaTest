@@ -34,10 +34,12 @@ public class bol {
 		list2.add("5");
 		list2.add("8");
 		list2.add("3");
+		System.out.println(list2);
 		
 		list1.removeAll(list2);
-		
 		System.out.println(list1.size());
+		System.out.println(list1);
+		
 		
 		System.out.println(1 + 1 ==1 );
 		
