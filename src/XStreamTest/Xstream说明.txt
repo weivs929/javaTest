@@ -1,0 +1,32 @@
+http://lavasoft.blog.51cto.com/62575/78437/
+
+XStream应用总结
+ 
+XStream是一个Java对象和XML相互转换的工具，很好很强大。提供了所有的基础类型、数组、集合等类型直接转换的支持。因此XML常用于数据交换、对象序列化（这种序列化和Java对象的序列化技术有着本质的区别）。
+ 
+XStream中的核心类就是XStream类，一般来说，熟悉这个类基本就够用了，如果你用的更多，估计是你设计有问题，否则不需要。
+ 
+XStream对象相当Java对象和XML之间的转换器，转换过程是双向的。创建XSteam对象的方式很简单，只需要new XStream()即可。
+Java到xml，用toXML()方法。
+Xml到Java，用fromXML()方法。
+ 
+在没有任何设置默认情况下，java到xml的映射，是java成员名对应xml的元素名，java类的全名对应xml根元素的名字。而实际中，往往是xml和java类都有了，要完成相互转换，必须进行别名映射。
+ 
+别名配置包含三种情况：
+1、类别名，用alias(String name, Class type)。
+2、类成员别名，用aliasField(String alias, Class definedIn, String fieldName)
+3、类成员作为属性别名，用 aliasAttribute(Class definedIn, String attributeName, String alias)，单独命名没有意义，还要通过useAttributeFor(Class definedIn, String fieldName) 应用到某个类上。
+别名的配置是非常重要的，但是其中有些细节问题很重要，在例子中会专门做详细说明。
+ 
+另外还有不太常用的方法：
+addImplicitCollection(Class ownerType, String fieldName)，去掉集合类型生成xml的父节点。
+registerConverter(Converter converter) ，注册一个转换器。
+ 
+如果你的xml很大，或者为了安全性，以流的方式传输，那么XStream也提供丰富的API，
+使用起来也非常简便。目前还用不到，暂不考虑。
+ 
+如果这些基本的操作还不能满足你应用的需求，XStream提供丰富的扩展点。你可以实现自己的转换器。还可以利用XStream完成更负责的功能，比如输出其他非xml格式的数据，还可以输出html，还支持XML Dom类型数据，这些应用起来稍微复杂些。当然这些不是XStream应用的重点，也不用理会，真正需要的时候再查看API和源码研究研究。
+ 
+XStream的优点很多，但是也有一些小bug，比如在定义别名中的下划线“_”转换为xml后会变成“__”这个符号，很变态。因此，尽量避免在别名中实用任何符号，却是需要下划线的时候，可以考虑实用连接符“-”，这个没有问题。
+ 
+另外，我们的Java Bean中，常常有一些常量，在转换过程，XStream也会将这些常量转换过去，形成常量的xml节点，这显然不是想要的结果，对于常量字段，就不做转换了。
